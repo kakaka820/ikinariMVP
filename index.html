@@ -25,11 +25,26 @@
     width: 100%;
     border-collapse: collapse;
   }
-    th, td { 
-      border: 1px solid #ccc; 
-      text-align: center; 
-      padding: 8px; 
-    } 
+    @media (max-width: 600px) {
+    table, thead, tbody, th, td, tr {
+      display: block;
+    }
+    th {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+    }
+       td {
+      border: none;
+      position: relative;
+      padding-left: 50%;
+    }td::before {
+      content: attr(data-label);
+      position: absolute;
+      left: 10px;
+      font-weight: bold;
+    }
+  }
     th { 
       background-color: #e0f0ff; 
     } 
