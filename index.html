@@ -108,19 +108,6 @@ onAuthStateChanged(auth, async (user) => {
 });
 
 
-await setDoc(doc(db, "users", auth.currentUser.uid), updateData);
-
-
-
-
-
-
-
-
-
-
-
-
     window.showRegister = () => {
       document.getElementById("loginSection").classList.add("hidden");
       document.getElementById("registerSection").classList.remove("hidden");
