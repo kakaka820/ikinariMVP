@@ -137,12 +137,19 @@
 
           const row = `
             <tr>
-              <td>${id}</td>
-              <td class="${highlightedUsers.date1.includes(id) ? "highlight" : ""}">${ans.date1 || ""}</td>
-              <td class="${highlightedUsers.date2.includes(id) ? "highlight" : ""}">${ans.date2 || ""}</td>
-              <td class="${highlightedUsers.date3.includes(id) ? "highlight" : ""}">${ans.date3 || ""}</td>
-              <td>${comment}</td>
-            </tr>
+  <td>${id}</td>
+  <td class="${highlightedUsers.date1.length >= 3 && highlightedUsers.date1.includes(id) ? "highlight" : ""}">
+    ${ans.date1 || ""}
+  </td>
+  <td class="${highlightedUsers.date2.length >= 3 && highlightedUsers.date2.includes(id) ? "highlight" : ""}">
+    ${ans.date2 || ""}
+  </td>
+  <td class="${highlightedUsers.date3.length >= 3 && highlightedUsers.date3.includes(id) ? "highlight" : ""}">
+    ${ans.date3 || ""}
+  </td>
+  <td>${comment}</td>
+</tr>
+
           `;
           tbody.innerHTML += row;
         });
