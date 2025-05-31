@@ -196,7 +196,7 @@ try {
   window.uid = uid;
   console.log("UID取得成功", uid);
   const userRef = doc(db, "users", id);
-  await setDoc(userRef, { uid }, { merge: true });  // uidだけを追記保存
+  await setDoc(userRef, { uid }, { merge: true }); 
   console.log("UID保存成功:", uid);
 } catch (error) {
   console.error("UID保存失敗:", error);
