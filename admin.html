@@ -570,16 +570,32 @@ async function populateDateFilterOptions() {
 
 
     document.getElementById("updateCapacityBtn").addEventListener("click", updateMaxCapacity);
-    document.getElementById("addDateBtn").addEventListener("click", () => {
-      const dateStr = document.getElementById("newDateInput").value.trim();
-      if (!dateStr) {
-        document.getElementById("datesMessage").textContent = "日程を入力してください。";
-        document.getElementById("datesMessage").style.color = "red";
-        return;
-      }
-     addDate(dateStr, currentUserId, currentUid);
-      document.getElementById("newDateInput").value = "";
+    async function addDate(dateStr, userId, uid) {
+  const msg = document.getElementById("datesMessage");
+  msg.textContent = "";
+
+  if (!dateStr) {
+    msg.textContent = "日程を入力してください。";
+    msg.style.color = "red";
+    return;
+  }
+
+  try {
+    await db.collection("settings").doc("eventDates").update({
+      list: firebase.firestore.FieldValue.arrayUnion(dateStr)
     });
+    msg.textContent = "日程を追加しました。";
+    msg.style.color = "green";
+
+    await displayDates();
+
+  } catch (e) {
+    console.error("日程追加失敗:", e);
+    msg.textContent = "日程の追加に失敗しました。";
+    msg.style.color = "red";
+  }
+}
+
     document.getElementById("applyFilterBtn").addEventListener("click", applyFilter);
     document.getElementById("clearFilterBtn").addEventListener("click", clearFilter);
   </script>
