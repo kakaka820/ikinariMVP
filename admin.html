@@ -485,7 +485,7 @@ msg.style.color = "green";
     tr.appendChild(toTd);
 
 const dateTd = document.createElement("td");
-dateTd.textContent = log.date || "-"; // アンケートの「日付」文字列
+dateTd.textContent = log.date || "-";
 tr.appendChild(dateTd);
 
 const timeTd = document.createElement("td");
@@ -524,7 +524,7 @@ async function populateDateFilterOptions() {
 }
     async function applyFilter() {
       const userFilter = document.getElementById("userFilter").value.trim().toLowerCase();
-      const uidFilter = document.getElementById("uidFilter").value.trim().toLowerCase();  // UIDフィルタ
+      const uidFilter = document.getElementById("uidFilter").value.trim().toLowerCase();  
        const dateFilter = document.getElementById("dateFilter");
   const selectedDates = Array.from(dateFilter.selectedOptions).map(option => option.value);
       let logs = await fetchLogs();
@@ -532,7 +532,7 @@ async function populateDateFilterOptions() {
         logs = logs.filter(log => (log.userId || "").toLowerCase().includes(userFilter));
       }
       if (uidFilter) {
-    logs = logs.filter(log => (log.uid || "").toLowerCase().includes(uidFilter));  // UIDでフィルタリング
+    logs = logs.filter(log => (log.uid || "").toLowerCase().includes(uidFilter));
   }
       if (selectedDates.length > 0) {
   logs = logs.filter(log => selectedDates.includes(log.date));
@@ -543,7 +543,7 @@ async function populateDateFilterOptions() {
       document.getElementById("userFilter").value = "";
       const dateFilter = document.getElementById("dateFilter");
   for (let option of dateFilter.options) {
-    option.selected = false;  // 全部の選択を外す
+    option.selected = false;  
   }
       loadLogs();
     }
@@ -554,7 +554,7 @@ async function populateDateFilterOptions() {
   msg.textContent = "";
   if (id === ADMIN_ID && pw === ADMIN_PW) {
     currentUserId = id;
-    currentUid = "admin";  // 固定でもOK。将来 Firebase Auth 使うなら UID に変える。
+    currentUid = "admin";
     document.getElementById("loginSection").classList.add("hidden");
     document.getElementById("adminSection").classList.remove("hidden");
     await displayMaxCapacity();
