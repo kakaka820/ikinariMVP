@@ -1,101 +1,62 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>日程調整アンケート</title>
-  <link rel="stylesheet" href="style.css" />
-
-  <!-- ✅ Firebaseを使ったモジュールスクリプト -->
-  <script type="module" src="./app.js" defer></script>
-
-  <!-- ✅ パスワードハッシュ用のSHA256ライブラリ -->
-  <script src="https://cdn.jsdelivr.net/npm/js-sha256@0.9.0/src/sha256.min.js"></script>
+  <title>日程調整アプリ</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="container" id="loginSection">
+    <h2>ログイン</h2>
+    <input id="userId" placeholder="ユーザーID"><br>
+    <input id="password" type="password" placeholder="パスワード"><br>
+    <button onclick="login()">ログイン</button>
+    <button onclick="showRegister()">新規登録</button>
+    <p id="loginError"></p>
+  </div>
 
-<!-- 🔒 ログインセクション -->
-<div class="container" id="loginSection">
-  <h2>ログイン</h2>
-  <input type="text" id="userId" placeholder="ID" /><br><br>
-  <input type="password" id="password" placeholder="パスワード" /><br><br>
-  <button onclick="login()">ログイン</button>
-  <button onclick="showRegister()">新規登録</button>
-  <p id="loginError"></p>
-</div>
+  <div class="container hidden" id="registerSection">
+    <h2>新規登録</h2>
+    <input id="newUserId" placeholder="ユーザーID"><br>
+    <input id="newPassword" type="password" placeholder="パスワード"><br>
+    <button onclick="register()">登録</button>
+    <button onclick="backToLogin()">戻る</button>
+    <p id="registerMessage"></p>
+  </div>
 
-<!-- 📝 新規登録セクション -->
-<div class="container hidden" id="registerSection">
-  <h2>新規アカウント登録</h2>
-  <input type="text" id="newUserId" placeholder="新しいID" /><br><br>
-  <input type="password" id="newPassword" placeholder="新しいパスワード" /><br><br>
-  <button onclick="register()">登録</button>
-  <button onclick="backToLogin()">戻る</button>
-  <p id="registerMessage"></p>
-</div>
-
-<!-- 📅 日程調整フォームセクション -->
-<div class="container hidden" id="formSection">
-  <h2>日程調整アンケート</h2>
-  <p id="welcomeMsg"></p>
-  <p id="maruStatusResult" class="fullMsg"></p>
-
-  <form id="scheduleForm">
-    <table>
-      <thead>
-        <tr><th>日付</th><th>〇</th><th>✕</th><th>観戦</th></tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>5月25日(土)</td>
-          <td><label><input type="radio" name="date1" value="〇" required></label></td>
-          <td><label><input type="radio" name="date1" value="✕" required></label></td>
-          <td><label><input type="radio" name="date1" value="観戦" required></label></td>
-        </tr>
-        <tr>
-          <td>5月26日(日)</td>
-          <td><label><input type="radio" name="date2" value="〇" required></label></td>
-          <td><label><input type="radio" name="date2" value="✕" required></label></td>
-          <td><label><input type="radio" name="date2" value="観戦" required></label></td>
-        </tr>
-        <tr>
-          <td>5月29日(水)</td>
-          <td><label><input type="radio" name="date3" value="〇" required></label></td>
-          <td><label><input type="radio" name="date3" value="✕" required></label></td>
-          <td><label><input type="radio" name="date3" value="観戦" required></label></td>
-        </tr>
-      </tbody>
-    </table>
-
-    <br>
-    <label>コメント（任意）:</label><br>
-    <textarea id="comment" placeholder="コメントの追記のみでは列の変更は起きません。赤枠で強調表示されるのは開催される村のうち、参加エントリーが早かった方のみです。"></textarea><br><br>
-
-    <button type="submit">送信・更新</button>
+  <div class="container hidden" id="formSection">
+    <h2>日程調整フォーム</h2>
+    <p id="welcomeMsg"></p>
+    <p id="maruStatusResult" class="fullMsg"></p>
+    <form id="scheduleForm">
+      <table id="form-table">
+        <thead>
+          <tr>
+            <th>日付</th>
+            <th>〇</th>
+            <th>×</th>
+            <th>観戦</th>
+          </tr>
+        </thead>
+        <tbody id="form-body"></tbody>
+      </table>
+      <textarea id="comment" placeholder="コメントの追記のみでは列の変更は起きません。赤枠で強調表示されている会はすでに満席の会です。"></textarea><br>
+      <button type="submit">送信・リロード</button>
+    </form>
     <p id="submitMessage"></p>
-  </form>
-</div>
+  </div>
 
-<!-- 📊 結果セクション -->
-<div class="container hidden" id="resultSection">
-  <h2>全回答一覧</h2>
-  <p id="maruStatusResult"></p>
- <table id="resultTable">
-    <thead>
-      <tr>
-        <th>ユーザーID</th>
-        <th>日付1</th>
-        <th>日付2</th>
-        <th>日付3</th>
-        <th>コメント</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-</div>
+  <div class="container hidden" id="resultSection">
+    <h2>回答一覧</h2>
+    <table id="resultTable">
+      <thead>
+        <tr id="resultHeaderRow"></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
 
-<!-- ✅ 注意：app.js は1回だけ読み込む！ -->
-<!-- ❌ 削除済み：<script src="app.js"></script> -->
-
+  <script type="module" src="app.js"></script>
 </body>
 </html>
