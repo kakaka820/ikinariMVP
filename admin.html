@@ -286,15 +286,6 @@ let currentUid = "";
       }
     }
 
-    async function getDates() {
-      try {
-        const snapshot = await db.collection("dates").orderBy("timestamp").get();
-        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      } catch (e) {
-        console.error("日程取得失敗:", e);
-        return [];
-      }
-    }
 
     async function displayDates() {
       const list = document.getElementById("datesList");
