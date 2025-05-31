@@ -584,6 +584,15 @@ async function populateDateFilterOptions() {
     await db.collection("settings").doc("eventDates").update({
       list: firebase.firestore.FieldValue.arrayUnion(dateStr)
     });
+    await addLog({
+     userId,
+      uid,
+      from,
+      to,
+      date,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+    
     msg.textContent = "日程を追加しました。";
     msg.style.color = "green";
 
