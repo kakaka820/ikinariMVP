@@ -18,7 +18,7 @@ body {
 .container input {
   width: 100%;
   max-width: 300px;
-  margin: 0 auto 8px auto; /* 下に8pxの余白 */
+  margin: 0 auto 8px auto; 
   padding: 10px;
   font-size: 16px;
   box-sizing: border-box;
@@ -27,7 +27,7 @@ body {
 #registerSection input {
   width: 100%;
   max-width: 300px;
-  margin: 0 auto 8px auto; /* 下に8pxの余白 */
+  margin: 0 auto 8px auto; 
   padding: 10px;
   font-size: 16px;
   box-sizing: border-box;
@@ -35,7 +35,7 @@ body {
 
 button {
   background-color: #4caf50;
-/*青色にしたかったら#2196F3に設定したらいいよ*/
+/*素敵な青色→#2196F3*/
   color: white;
   border: none;
   padding: 0.6em 1em;
@@ -75,7 +75,7 @@ textarea {
   width: 100%;
   height: 60px;
   margin-top: 8px;
-  margin-bottom: 8px; /* ←★ コメント欄の下に余白を追加 */
+  margin-bottom: 8px;
 }
 
 .highlight {
@@ -103,7 +103,7 @@ textarea {
   th,
   td,
   tr {
-    /* スマホ対応で追加したい内容があれば後で追加 */
+    /* スマホ対応で追加したい内容後で考える */
   }
 
   td,
