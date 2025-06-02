@@ -45,6 +45,11 @@ hr{
       border-radius: 12px;
       box-shadow: 0 0 12px rgb(0 0 0 / 0.1);
     }
+.log-table-wrapper {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
     label {
       display: block;
       margin-top: 16px;
