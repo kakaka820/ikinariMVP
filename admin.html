@@ -225,6 +225,7 @@
  </div>
   <!-- Firebase SDK (v9 compat版) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
   <script>
@@ -241,9 +242,6 @@
 
 let currentUserId = "";
 let currentUid = "";
-
-    const ADMIN_ID = "admin";
-    const ADMIN_PW = "password";
 
     async function getMaxCapacity() {
       try {
@@ -512,7 +510,20 @@ async function populateDateFilterOptions() {
   } catch (e) {
     console.error("日付フィルター取得失敗:", e);
   }
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
     async function applyFilter() {
       const userFilter = document.getElementById("userFilter").value.trim().toLowerCase();
       const uidFilter = document.getElementById("uidFilter").value.trim().toLowerCase();  
