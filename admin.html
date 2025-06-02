@@ -514,7 +514,56 @@ async function populateDateFilterOptions() {
 
 
 
+async function sha256(str) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(str);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  return hashHex;
+}
 
+document.getElementById("loginBtn").addEventListener("click", async () => {
+  const id = document.getElementById("adminId").value.trim();
+  const pw = document.getElementById("adminPw").value;
+  const anonymousUid = firebase.auth().currentUser?.uid;
+
+  const msg = document.getElementById("loginMessage");
+  msg.textContent = "";
+  msg.style.color = "red";
+
+  try {
+    const docRef = firebase.firestore().collection("adminUsers").doc(id);
+    const doc = await docRef.get();
+
+    if (!doc.exists) {
+      msg.textContent = "管理者に連絡してください（エラーコード：200）";
+      return;
+    }
+
+    const data = doc.data(); 
+    const hashedPw = await sha256(pw);
+
+    if (data.password !== hashedPw) {
+      msg.textContent = "パスワードが間違っています。";
+      return;
+    }
+    currentUserId = id;
+
+    document.getElementById("loginSection").classList.add("hidden");
+    document.getElementById("adminSection").classList.remove("hidden");
+
+    await displayMaxCapacity();
+    await displayDates();
+    await populateDateFilterOptions();
+    const logs = await fetchLogs();
+    renderLogs(logs);
+
+  } catch (error) {
+    console.error("ログイン中にエラー:", error);
+    msg.textContent = "ログイン処理中にエラーが発生しました。";
+  }
+}); 
 
 
 
