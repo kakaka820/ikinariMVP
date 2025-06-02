@@ -387,7 +387,6 @@ async function removeDate(dateStr) {
     msg.style.color = "green";
     displayDates();
     await cleanUpLogs(dateStr);
-
   } catch (e) {
     console.error("日程削除失敗:", e);
     msg.textContent = "日程の削除に失敗しました。";
