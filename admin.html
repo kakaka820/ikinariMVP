@@ -598,36 +598,7 @@ document.getElementById("loginBtn").addEventListener("click", async () => {
   }
       loadLogs();
     }
-   document.getElementById("loginBtn").addEventListener("click", async () => {
-  const id = document.getElementById("adminId").value;
-  const pw = document.getElementById("adminPw").value;
-  const msg = document.getElementById("loginMessage");
-  msg.textContent = "";
-  if (id === ADMIN_ID && pw === ADMIN_PW) {
-    currentUserId = id;
-    currentUid = "admin";
-    document.getElementById("loginSection").classList.add("hidden");
-    document.getElementById("adminSection").classList.remove("hidden");
-    await displayMaxCapacity();
-    await displayDates();
-    await populateDateFilterOptions(); 
-    const logs = await fetchLogs();
-    renderLogs(logs);
-  } else {
-    msg.textContent = "IDまたはパスワードが違います。";
-    msg.style.color = "red";
-  }
-});
-    async function initializeAdmin() {
-      await displayMaxCapacity();
-      await displayDates();
-      await loadLogs();
-    }
-    async function loadLogs() {
-      const logs = await fetchLogs();
-      renderLogs(logs);
-    }
-
+  
 
     document.getElementById("updateCapacityBtn").addEventListener("click", updateMaxCapacity);
     async function addDate(dateStr, userId, uid) {
