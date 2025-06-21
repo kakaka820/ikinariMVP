@@ -82,7 +82,7 @@ async function showAllResults() {
   headerRow.innerHTML = "";
 
   const thUser = document.createElement("th");
-  thUser.textContent = "ユーザーID";
+  thUser.textContent = "参加者名";
   headerRow.appendChild(thUser);
 
   dates.forEach(date => {
@@ -211,7 +211,7 @@ try {
       document.getElementById("loginError").textContent = "パスワードが違います。";
     }
   } else {
-    document.getElementById("loginError").textContent = "IDが存在しません。";
+    document.getElementById("loginError").textContent = "アカウントが存在しません。";
   }
 };
 
@@ -219,16 +219,16 @@ window.register = async function () {
   const id = document.getElementById("newUserId").value.trim();
   const pass = document.getElementById("newPassword").value;
   if (!id || !pass) {
-    document.getElementById("registerMessage").textContent = "IDとパスワードを入力してください。";
+    document.getElementById("registerMessage").textContent = "名前とパスワードを入力してください。";
     return;
   }
   if (/[<>]/.test(id)) {
-    document.getElementById("registerMessage").textContent = "IDに < や > を含めないでください。";
+    document.getElementById("registerMessage").textContent = "名前に < や > を含めないでください。";
     return;
   }
   const docSnap = await getDoc(doc(db, "users", id));
   if (docSnap.exists()) {
-    document.getElementById("registerMessage").textContent = "このIDはすでに使われています。";
+    document.getElementById("registerMessage").textContent = "この名前はすでに使われています。";
   } else {
     const hashedPass = await sha256(pass);
     await setDoc(doc(db, "users", id), {
