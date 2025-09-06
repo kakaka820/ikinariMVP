@@ -308,6 +308,11 @@ document.getElementById("scheduleForm").addEventListener("submit", async (e) => 
 
   });
 
+if (Object.keys(answers).length === 0) {
+    return;
+  }
+  
+
   const comment = document.getElementById("comment").value;
   const prevAnswers = window.users[window.currentUser]?.answers || {};
   const prevComment = window.users[window.currentUser]?.comment || "";
