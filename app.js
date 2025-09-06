@@ -318,9 +318,6 @@ dates.forEach(date => {
     answers[String(date)] = prevAnswers[String(date)] || { value: "", ts: null };
   }
 });
-
-    }
-  });
   if (comment !== prevComment) {
     logPromises.push(addDoc(collection(db, "logs"), {
       userId: window.currentUser,
