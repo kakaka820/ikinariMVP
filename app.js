@@ -310,7 +310,6 @@ dates.forEach(date => {
       to: newVal,
       timestamp: serverTimestamp()
     }));
-
     answers[String(date)] = {
       value: newVal || "",
       ts: newVal === "〇" ? serverTimestamp() : null
