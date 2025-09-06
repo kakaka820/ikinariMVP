@@ -122,9 +122,9 @@ async function showAllResults() {
 
 
     
-const answersArray = Object.values(a).map(answer => answer.value);
+ const answersArray = Object.keys(a).map(date => a[date]?.value);
     if (answersArray.every(value => value === "")) {
-      return; 
+      return;
     }
 
 
