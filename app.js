@@ -67,11 +67,14 @@ async function loadPreviousAnswers() {
   const comment = userData.comment || "";
 
   dates.forEach(date => {
-    const selected = answers[date];
-    if (selected) {
-      const el = document.querySelector(`input[name="response-${date}"][value="${selected}"]`);
-      if (el) el.checked = true;
-    }
+    const selected = answers[String(date)]?.value;
+if (selected) {
+  const el = document.querySelector(
+    `input[name="response-${String(date)}"][value="${selected}"]`
+  );
+  if (el) el.checked = true;
+}
+
   });
   document.getElementById("comment").value = comment;
 }
@@ -114,14 +117,27 @@ async function showAllResults() {
     window.users[id] = data;
     const a = data.answers || {};
     dates.forEach(date => {
-      if (a[date] === "〇") maruUsers[date].push(id);
-    });
+  if (a[String(date)]?.value === "〇") {
+    maruUsers[date].push({ id, ts: a[String(date)].ts });
+  }
+});
+
+
+dates.forEach(date => {
+  maruUsers[date].sort((x, y) => (x.ts?.toMillis?.() || 0) - (y.ts?.toMillis?.() || 0));
+  highlighted[date] = maruUsers[date].slice(0, MAX).map(u => u.id);
+});
+
   });
 
  
   dates.forEach(date => {
-    highlighted[date] = maruUsers[date].length >= MAX ? maruUsers[date].slice(0, MAX) : [];
-  });
+  highlighted[String(date)] =
+    maruUsers[String(date)].length >= MAX
+      ? maruUsers[String(date)].slice(0, MAX).map(u => u.id)
+      : [];
+});
+
 
   if (Object.values(maruUsers).some(arr => arr.length >= MAX)) {
     if (status) status.textContent = "満席となった会に関しましてはリザーバー枠での参加を募集いたします。リザーバー希望の方は〇にチェックの上送信お願いします。";
@@ -139,9 +155,9 @@ async function showAllResults() {
 
     dates.forEach(date => {
       const cell = document.createElement("td");
-      const answer = a[date] || "";
+      const answer = a[String(date)]?.value || "";
       const isOverCapacity = maruUsers[date].length > MAX;
-const isReserve = isOverCapacity && maruUsers[date].includes(id) && !highlighted[date].includes(id);
+const isReserve = isOverCapacity && maruUsers[date].some(u => u.id === id) && !highlighted[date].includes(id);
       if (highlighted[date]?.includes(id)) {cell.classList.add("highlight");}
      if (answer === "〇" && isReserve) {
     cell.textContent = "リザーバー";
@@ -258,7 +274,8 @@ document.getElementById("scheduleForm").addEventListener("submit", async (e) => 
   const answers = {};
   answerInputs.forEach(input => {
     const date = input.name.replace("response-", "");
-    answers[date] = input.value;
+    answers[String(date)] = { value: input.value, ts: null };
+
   });
 
   const comment = document.getElementById("comment").value;
@@ -270,18 +287,29 @@ document.getElementById("scheduleForm").addEventListener("submit", async (e) => 
   const dates = await fetchCandidateDates();
   const logPromises = [];
 
-  dates.forEach(date => {
-    const oldVal = prevAnswers[date] || "";
-    const newVal = answers[date] || "";
-    if (oldVal !== newVal) {
-      logPromises.push(addDoc(collection(db, "logs"), {
-        userId: window.currentUser,
-        uid: window.uid || "unknown",
-        date,
-        from: oldVal,
-        to: newVal,
-        timestamp: serverTimestamp()
-      }));
+dates.forEach(date => {
+  const oldVal = prevAnswers[String(date)]?.value || "";
+  const newVal = answers[String(date)]?.value || "";
+
+  if (oldVal !== newVal) {
+    logPromises.push(addDoc(collection(db, "logs"), {
+      userId: window.currentUser,
+      uid: window.uid || "unknown",
+      date,
+      from: oldVal,
+      to: newVal,
+      timestamp: serverTimestamp()
+    }));
+
+    answers[String(date)] = {
+      value: newVal || "",
+      ts: newVal === "〇" ? serverTimestamp() : null
+    };
+  } else {
+    answers[String(date)] = prevAnswers[String(date)] || { value: "", ts: null };
+  }
+});
+
     }
   });
   if (comment !== prevComment) {
