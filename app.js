@@ -66,6 +66,39 @@ async function loadPreviousAnswers() {
   const answers = userData.answers || {};
   const comment = userData.comment || "";
 
+
+
+
+
+
+
+
+
+
+
+
+
+if (Object.keys(answers).length === 0) {
+    const userRef = doc(db, "users", window.currentUser);
+    await setDoc(userRef, { answers: {} }, { merge: true });
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
   dates.forEach(date => {
     const selected = answers[String(date)]?.value;
 if (selected) {
