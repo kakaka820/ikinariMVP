@@ -116,6 +116,22 @@ async function showAllResults() {
   docsArray.forEach(({ id, data }) => {
     window.users[id] = data;
     const a = data.answers || {};
+
+
+
+
+
+    
+const answersArray = Object.values(a).map(answer => answer.value);
+    if (answersArray.every(value => value === "")) {
+      return; 
+    }
+
+
+
+
+
+    
     dates.forEach(date => {
   if (a[String(date)]?.value === "〇") {
     maruUsers[date].push({ id, ts: a[String(date)].ts });
