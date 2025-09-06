@@ -122,8 +122,8 @@ async function showAllResults() {
 
 
     
- const answersArray = Object.keys(a).map(date => a[date]?.value);
-    if (answersArray.every(value => value === "")) {
+ const isAnswersEmpty = Object.keys(a).every(date => a[date]?.value === "");
+    if (isAnswersEmpty) {
       return;
     }
 
