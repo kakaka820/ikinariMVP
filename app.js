@@ -1,3 +1,4 @@
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
 import { getFirestore, doc, setDoc, getDoc, collection, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
@@ -66,39 +67,6 @@ async function loadPreviousAnswers() {
   const answers = userData.answers || {};
   const comment = userData.comment || "";
 
-
-
-
-
-
-
-
-
-
-
-
-
-if (Object.keys(answers).length === 0) {
-    const userRef = doc(db, "users", window.currentUser);
-    await setDoc(userRef, { answers: {} }, { merge: true });
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
   dates.forEach(date => {
     const selected = answers[String(date)]?.value;
 if (selected) {
@@ -151,15 +119,14 @@ async function showAllResults() {
     const a = data.answers || {};
 
 
-    
-console.log("docsArray:", docsArray);
-
-
 
 
 
     
-  const isAnswersEmpty = Object.keys(a).every(date => a[date]?.value === "");
+  const isAnswersEmpty = Object.keys(a).every(date => {
+      const answerValue = a[date]?.value;
+      return answerValue === "" || answerValue === null || answerValue === undefined;
+    });
     if (isAnswersEmpty) {
       console.log(`User ${id} has empty answers, skipping...`);
       return;
@@ -341,55 +308,12 @@ document.getElementById("scheduleForm").addEventListener("submit", async (e) => 
 
   });
 
-if (Object.keys(answers).length === 0) {
-    return;
-  }
-  
-
   const comment = document.getElementById("comment").value;
   const prevAnswers = window.users[window.currentUser]?.answers || {};
   const prevComment = window.users[window.currentUser]?.comment || "";
 
   const userRef = doc(db, "users", window.currentUser);
   const userSnap = await getDoc(userRef);
-
-
-
-
-
-
-
-
-
-
-
-let answers = window.users[window.currentUser]?.answers || {};
-
-if (Object.keys(answers).length === 0) {
-  answers = undefined;  // 空の answers を削除するため、undefined に設定
-}
-
-await setDoc(userRef, {
-  answers,
-  comment: window.users[window.currentUser]?.comment || "",
-  updatedAt: serverTimestamp()
-}, { merge: true });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
   const dates = await fetchCandidateDates();
   const logPromises = [];
 
