@@ -118,6 +118,10 @@ async function showAllResults() {
     const a = data.answers || {};
 
 
+    
+console.log("docsArray:", docsArray);
+
+
 
 
 
