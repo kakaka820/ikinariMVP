@@ -126,10 +126,7 @@ console.log("docsArray:", docsArray);
 
 
     
-  const isAnswersEmpty = Object.keys(a).every(date => {
-      const answerValue = a[date]?.value;
-      return answerValue === "" || answerValue === null || answerValue === undefined;
-    });
+  const isAnswersEmpty = Object.keys(a).every(date => a[date]?.value === "");
     if (isAnswersEmpty) {
       console.log(`User ${id} has empty answers, skipping...`);
       return;
