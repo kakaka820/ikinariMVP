@@ -319,6 +319,44 @@ if (Object.keys(answers).length === 0) {
 
   const userRef = doc(db, "users", window.currentUser);
   const userSnap = await getDoc(userRef);
+
+
+
+
+
+
+
+
+
+
+
+let answers = window.users[window.currentUser]?.answers || {};
+
+if (Object.keys(answers).length === 0) {
+  answers = undefined;  // 空の answers を削除するため、undefined に設定
+}
+
+await setDoc(userRef, {
+  answers,
+  comment: window.users[window.currentUser]?.comment || "",
+  updatedAt: serverTimestamp()
+}, { merge: true });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
   const dates = await fetchCandidateDates();
   const logPromises = [];
 
