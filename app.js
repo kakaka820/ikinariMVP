@@ -123,10 +123,8 @@ async function showAllResults() {
 
 
     
-  const isAnswersEmpty = Object.keys(a).every(date => {
-      const answerValue = a[date]?.value;
-      return answerValue === "" || answerValue === null || answerValue === undefined;
-    });
+  console.log(`User ${id}'s answers:`, a);
+    const isAnswersEmpty = Object.keys(a).every(date => a[date]?.value === "");
     if (isAnswersEmpty) {
       console.log(`User ${id} has empty answers, skipping...`);
       return;
