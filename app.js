@@ -311,15 +311,18 @@ document.getElementById("scheduleForm").addEventListener("submit", async (e) => 
   const prevComment = window.users[window.currentUser]?.comment || "";
 
   const userRef = doc(db, "users", window.currentUser);
-  const userSnap = await getDoc(userRef);
   const dates = await fetchCandidateDates();
   const logPromises = [];
+
+  // 変更があったかどうかを追跡するフラグ
+  let hasAnswerChange = false;
 
 dates.forEach(date => {
   const oldVal = prevAnswers[String(date)]?.value || "";
   const newVal = answers[String(date)]?.value || "";
 
   if (oldVal !== newVal) {
+    hasAnswerChange = true;
     logPromises.push(addDoc(collection(db, "logs"), {
       userId: window.currentUser,
       uid: window.uid || "unknown",
@@ -336,7 +339,9 @@ dates.forEach(date => {
     answers[String(date)] = prevAnswers[String(date)] || { value: "", ts: null };
   }
 });
-  if (comment !== prevComment) {
+
+  const hasCommentChange = (comment !== prevComment);
+  if (hasCommentChange) {
     logPromises.push(addDoc(collection(db, "logs"), {
       userId: window.currentUser,
       uid: window.uid || "unknown",
@@ -347,16 +352,23 @@ dates.forEach(date => {
     }));
   }
 
-  await Promise.all(logPromises);
-  await setDoc(userRef, {
-    ...window.users[window.currentUser],
-    answers,
-    comment,
-    updatedAt: serverTimestamp()
-  });
-
-  await showAllResults();
-  document.getElementById("submitMessage").textContent = "送信しました！";
+  // 変更があった場合のみFirestoreに書き込み
+  if (hasAnswerChange || hasCommentChange) {
+    await Promise.all(logPromises);
+    
+    const payload = {
+      ...window.users[window.currentUser],
+      answers,
+      comment,
+      updatedAt: serverTimestamp()
+    };
+    
+    await setDoc(userRef, payload);
+    await showAllResults();
+    document.getElementById("submitMessage").textContent = "送信しました！";
+  } else {
+    // 変更がない場合はメッセージを表示し、書き込みをスキップ
+  }
 });
 
 document.addEventListener('keydown', function(event) {
